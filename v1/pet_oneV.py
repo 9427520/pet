@@ -17,6 +17,30 @@ from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging import Configuration, ApiClient, MessagingApi, ReplyMessageRequest, TextMessage, MessagingApiBlob
 from collections import OrderedDict
 
+from linebot.v3 import (
+    WebhookHandler
+)
+from linebot.v3.exceptions import (
+    InvalidSignatureError
+)
+from linebot.v3.messaging import (
+    Configuration,
+    ApiClient,
+    MessagingApi,
+    ReplyMessageRequest,
+    TextMessage,
+    MessagingApiBlob,
+    PostbackAction,
+    QuickReply,
+    QuickReplyItem
+)
+from linebot.v3.webhooks import (
+    MessageEvent,
+    TextMessageContent,
+    ImageMessageContent,
+    PostbackEvent
+)
+
 app = Flask(__name__)
 CORS(app)  # 允许跨域请求
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -25,9 +49,9 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 current_script_dir = os.getcwd()
 
 # 读取 LineBOT Key json文件
-json_file_path = os.path.join(current_script_dir, 'weilinebot.json')
+json_file_path = os.path.join(current_script_dir, 'env.json')
 # 读取 GCP json文件
-gcp_file_path = os.path.join(current_script_dir, 'williamcloud.json')
+gcp_file_path = os.path.join(current_script_dir, 'lbgcs.json')
 # 设置 Google Cloud 认证
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = gcp_file_path
 
@@ -180,7 +204,7 @@ def handle_message(event):
 
         socketio.emit('new_data', global_data)
 
-        liff_url = "https://liff.line.me/2005517118-y5JKr3xg"
+        liff_url = "https://liff.line.me/2005466366-9q10LQbL"
 
         line_bot_api.reply_message(
             ReplyMessageRequest(
@@ -190,4 +214,5 @@ def handle_message(event):
         )
 
 if __name__ == "__main__":
+    #app.run()
     socketio.run(app, host='0.0.0.0', port=5000, allow_unsafe_werkzeug=True)
