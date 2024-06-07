@@ -1,0 +1,78 @@
+[
+  {
+    "Test": "WBC",
+    "Results": "13.9"
+  },
+  {
+    "Test": "Lym",
+    "Results": "4"
+  },
+  {
+    "Test": "Mono",
+    "Results": "14"
+  },
+  {
+    "Test": "Gran",
+    "Results": "8.4"
+  },
+  {
+    "Test": "Lym",
+    "Results": "28.9"
+  },
+  {
+    "Test": "Mono",
+    "Results": "10.4"
+  },
+  {
+    "Test": "Gran",
+    "Results": "59.7"
+  },
+  {
+    "Test": "HGB",
+    "Results": "17.6"
+  },
+  {
+    "Test": "HCT",
+    "Results": "45.6"
+  },
+  {
+    "Test": "RBC",
+    "Results": "7.79"
+  },
+  {
+    "Test": "MCV",
+    "Results": "58.5"
+  },
+  {
+    "Test": "MCH",
+    "Results": "22.6"
+  },
+  {
+    "Test": "MCHC",
+    "Results": "38.7"
+  },
+  {
+    "Test": "RDW",
+    "Results": "12.6"
+  },
+  {
+    "Test": "RDWa",
+    "Results": "38.1"
+  },
+  {
+    "Test": "PLT",
+    "Results": "266"
+  },
+  {
+    "Test": "MPV",
+    "Results": "7.9"
+  },
+  {
+    "Test": "EOS",
+    "Results": "0.1"
+  },
+  {
+    "Test": "EOS",
+    "Results": "1"
+  }
+]
