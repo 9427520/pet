@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寵物健檢</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <style>
+        table {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 0;
+            text-align: left;
+            position: relative;
+        }
+        .delete-row-btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 2px 5px;
+            cursor: pointer;
+            display: none;
+        }
+        .editable-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: none;
+            outline: none;
+        }
+        .value-input, .unit-input {
+            box-sizing: border-box;
+            padding: 10px;
+            border: none;
+            outline: none;
+            display: inline-block;
+        }
+        .value-input {
+            width: 50%;
+        }
+        .unit-input {
+            width: calc(50% - 10px);
+        }
+        .range-input {
+            width: calc(100% - 30px);
+            box-sizing: border-box;
+            padding: 10px;
+            border: none;
+            outline: none;
+        }
+        .add-btn {
+            background-color: #f0ad4e;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .selectable-row:hover {
+            background-color: #f1f1f1;
+        }
+        .selected {
+            background-color: #d3d3d3;
+        }
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+                font-size: 14px;
+            }
+            .editable-input, .range-input, .value-input, .unit-input {
+                padding: 5px;
+            }
+            .delete-row-btn {
+                right: 2px;
+                top: 2px;
+                padding: 1px 3px;
+            }
+        }
+        @media (max-width: 480px) {
+            table {
+                width: 100%;
+                font-size: 12px;
+            }
+            .editable-input, .range-input, .value-input, .unit-input {
+                padding: 3px;
+            }
+            .delete-row-btn {
+                right: 2px;
+                top: 2px;
+                padding: 1px 3px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>寵物健檢</h1>
+    <table id="editableTable">
+        <thead>
+            <tr>
+                <th colspan="3"><input type="text" id="petName" placeholder="寵物名稱" class="editable-input"></th>
+            </tr>
+            <tr>
+                <th colspan="3"><input type="text" id="reportDate" placeholder="報告時間" class="editable-input"></th>
+            </tr>
+            <tr>
+                <th>檢查項目</th>
+                <th>檢查數值</th>
+                <th>範圍值</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button class="add-btn" onclick="addRow()">新增一列</button>
+    <button class="add-btn" onclick="saveTable()">儲存所有更改</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            liff.init({ liffId: "2005517118-y5JKr3xg" }).then(() => {
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                } else {
+                    fetchData();
+                }
+            }).catch(err => {
+                console.error('LIFF Initialization failed ', err);
+            });
+
+            var socket = io('http://127.0.0.1:5000');
+
+            socket.on('new_data', function(data) {
+                console.log("New data received:", data);
+                populateTable(data);
+            });
+        });
+
+        function fetchData() {
+            fetch('http://127.0.0.1:5000/api/data')
+                .then(response => response.json())
+                .then(data => {
+                    populateTable(data);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function populateTable(data) {
+            var table = document.getElementById('editableTable').getElementsByTagName('tbody')[0];
+            table.innerHTML = '';
+
+            data.forEach(item => {
+                var row = table.insertRow();
+                row.setAttribute('data-key', item.key);
+                row.className = 'selectable-row';
+                row.onclick = function() {
+                    selectRow(this);
+                };
+
+                var cell1 = row.insertCell();
+                cell1.innerHTML = '<input type="text" value="' + item.key + '" class="editable-input">';
+                
+                var cell2 = row.insertCell();
+                var match = item.value.match(/^([^\d]*\d+(\.\d+)?)(.*)$/);
+                var value = match ? match[1].trim() : item.value;
+                var unit = match ? match[3].trim() : '';
+                cell2.innerHTML = `
+                    <input type="text" value="${value}" class="value-input">
+                    <input type="text" value="${unit}" class="unit-input">
+                `;
+
+                var cell3 = row.insertCell();
+                cell3.innerHTML = `
+                    <input type="text" value="${item.range}" class="range-input">
+                    <button class="delete-row-btn" onclick="confirmDeleteRow(event, this)">x</button>
+                `;
+            });
+        }
+
+        function selectRow(row) {
+            var rows = document.getElementById('editableTable').getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var deleteButton = rows[i].querySelector('.delete-row-btn');
+                if (deleteButton) {
+                    deleteButton.style.display = 'none';
+                }
+            }
+            var button = row.querySelector('.delete-row-btn');
+            button.style.display = 'inline';
+        }
+
+        function confirmDeleteRow(event, button) {
+            event.stopPropagation();
+            var row = button.parentElement.parentElement;
+            var confirmation = confirm("確認刪除此行?");
+            if (confirmation) {
+                row.parentNode.removeChild(row);
+            }
+        }
+
+        function addRow() {
+            var table = document.getElementById('editableTable').getElementsByTagName('tbody')[0];
+            var row = table.insertRow();
+            row.className = 'selectable-row';
+            row.onclick = function() {
+                selectRow(this);
+            };
+
+            var cell1 = row.insertCell();
+            cell1.innerHTML = '<input type="text" class="editable-input">';
+            
+            var cell2 = row.insertCell();
+            cell2.innerHTML = `
+                <input type="text" class="value-input">
+                <input type="text" class="unit-input">
+            `;
+
+            var cell3 = row.insertCell();
+            cell3.innerHTML = `
+                <input type="text" class="range-input">
+                <button class="delete-row-btn" onclick="confirmDeleteRow(event, this)">x</button>
+            `;
+        }
+
+        function saveTable() {
+            var table = document.getElementById('editableTable').getElementsByTagName('tbody')[0];
+            var rows = table.getElementsByTagName('tr');
+            var data = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var key = row.cells[0].getElementsByTagName('input')[0].value;
+                var value = row.cells[1].getElementsByTagName('input')[0].value + ' ' + row.cells[1].getElementsByTagName('input')[1].value;
+                var range = row.cells[2].getElementsByTagName('input')[0].value;
+                data.push({ key: key, value: value, range: range });
+            }
+
+            fetch('http://127.0.0.1:5000/api/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }).then(response => response.json())
+              .then(data => {
+                  console.log('Success:', data);
+                  generateReport(data.data);
+              })
+              .catch((error) => {
+                  console.error('Error:', error);
+              });
+        }
+
+        function generateReport(data) {
+            // 這裡的 generateReport 是用來將表格數據畫在圖上
+            fetch('http://127.0.0.1:5000/api/generate_report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }).then(response => response.json())
+              .then(data => {
+                  console.log('Report generated:', data);
+                  // 顯示生成的報告
+                  var img = document.createElement('img');
+                  img.src = 'data:image/png;base64,' + data.report_image;
+                  document.body.appendChild(img);
+              })
+              .catch((error) => {
+                  console.error('Error generating report:', error);
+              });
+        }
+    </script>
+</body>
+</html>
