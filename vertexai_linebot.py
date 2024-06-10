@@ -4,8 +4,9 @@ import os
 import json
 from io import BytesIO
 from PIL import Image
+import hospitalmap  #導入hospitalmap.py
 
-from flask import Flask, request, abort
+from flask import Flask, request, abort, redirect
 
 from linebot.v3 import (
     WebhookHandler
@@ -17,18 +18,24 @@ from linebot.v3.messaging import (
     Configuration,
     ApiClient,
     MessagingApi,
+    MessageAction,
     ReplyMessageRequest,
     TextMessage,
     MessagingApiBlob,
     PostbackAction,
     QuickReply,
-    QuickReplyItem
+    QuickReplyItem,
+    FlexMessage,
+    FlexContainer,
+    URIAction
 )
 from linebot.v3.webhooks import (
     MessageEvent,
     TextMessageContent,
     ImageMessageContent,
-    PostbackEvent
+    PostbackEvent,
+    FollowEvent,
+    LocationMessageContent
 )
 
 app = Flask(__name__)
@@ -39,7 +46,7 @@ current_script_dir = os.path.dirname(current_script_path)
 #讀取 LineBOT Key json檔
 json_file_path = os.path.join(current_script_dir, 'env.json')
 #讀取 GCP json檔
-gcp_file_path = os.path.join(current_script_dir, 'lbgcs.json')
+gcp_file_path = os.path.join(current_script_dir, 'sandrakey.json')
 # gcloud auth application-default login
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = gcp_file_path
 # LineBOT ENV Config file
@@ -73,6 +80,62 @@ def callback():
 
     return 'OK'
 
+
+def check_pet_card_count(user_id):
+    # 模擬檢查資料庫邏輯
+    # 示例返回 1 表示有一張健保卡
+    return 1
+
+
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    data = event.postback.data
+    user_id = event.source.user_id
+    app.logger.info(f"Postback data: {data}")
+    app.logger.info(f"User ID: {user_id}")
+    
+    if data == 'open_camera':
+        pet_card_count = check_pet_card_count(user_id)
+        app.logger.info(f"Pet card count: {pet_card_count}")
+
+        if pet_card_count < 1:
+            reply_text = "還未建立毛小孩健保卡，請至選單開始建立健保卡吧!"
+            line_bot_api.reply_message(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=reply_text)]
+                )
+            )
+            return  # 停止後續代碼的執行
+
+        elif pet_card_count == 1:
+            reply_text = "查詢到毛小孩健保卡! 請開啟相機拍下健診資料"
+            camera_action = URIAction(label='開啟相機', uri='https://line.me/R/nv/camera/')
+            line_bot_api.reply_message(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[
+                        TextMessage(text=reply_text),
+                        TextMessage(text='點擊下方按鈕開啟相機', quick_reply=QuickReply(items=[
+                            QuickReplyItem(action=camera_action)
+                        ]))
+                    ]
+                )
+            )
+            return  # 停止後續代碼的執行
+
+
+        else:  #設定成quick_reply，選擇哪一隻
+            reply_text = "查詢到您有多隻寶貝，請按健保卡本中選擇要為哪一隻毛小孩建立"
+            line_bot_api.reply_message(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=reply_text)]
+                )
+            )
+
+
+
 @handler.add(MessageEvent, message=ImageMessageContent)
 def handle_message(event):
     with ApiClient(configuration) as api_client:
@@ -105,7 +168,19 @@ def handle_message(event):
                 messages=[TextMessage(text=msg)]
         )
     )
+
+
+@handler.add(MessageEvent, message=(TextMessageContent, LocationMessageContent))
+def handle_map_message(event):
+    hospitalmap.handle_message(event, line_bot_api)
+
+
+
+
 	
 if __name__ == "__main__":
-    app.run()	
+    app.run(debug=True)
 	
+
+
+
