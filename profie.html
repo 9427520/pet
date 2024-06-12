@@ -680,8 +680,6 @@
             };
         }
 
-
-
         function closeCropper() {
             document.getElementById('cropper-container').style.display = 'none';
             cropper.destroy();
@@ -698,7 +696,7 @@
 
         function saveNotifyDate() {
             const notifyDate = document.getElementById('notifyDate').value;
-            const userId = "Uf4abc996d193db1edac609ed0e3e3dd7"; // 示例 ID，需要根據實際情況獲取
+            const userId = "Uf4abc996d193db1edac609ed0e3e3dd7"; 
 
             // 獲取現有數據
             let petData = JSON.parse(localStorage.getItem('petdata')) || {};
@@ -716,6 +714,7 @@
             localStorage.setItem('petdata', JSON.stringify(petData));
             document.getElementById('notifyDateWrapper').style.display = 'none';
         }
+
 
         function deleteNotifyDate() {
             const userId = "Uf4abc996d193db1edac609ed0e3e3dd7"; // 示例 ID，需要根據實際情況獲取
@@ -743,6 +742,7 @@
         function addCard() {
             const newCard = document.querySelector('.container').cloneNode(true);
             const cardNumber = document.querySelectorAll('.container').length + 1;
+
             newCard.querySelector('.number').innerText = `No. ${cardNumber}`;
             newCard.querySelector('.profile-image').id = `profileImage_${cardNumber}`;
             newCard.querySelector('input[type="text"]').id = `name_${cardNumber}`;
@@ -757,6 +757,8 @@
             newCard.querySelector('span[id^="vaccineSpan"]').id = `vaccineSpan_${cardNumber}`;
             newCard.querySelector('span[id^="age"]').id = `age_${cardNumber}`;
             newCard.querySelector(`#birthdate_${cardNumber}`).onchange = () => calculateAge(cardNumber);
+            newCard.querySelector(`#name_${cardNumber}`).oninput = () => validateName(cardNumber);
+            newCard.querySelector(`#vaccine_${cardNumber}`).onchange = () => validateVaccineDate(cardNumber);
             newCard.querySelector(`#profileImage_${cardNumber}`).src = "https://placehold.co/100x130";
             newCard.querySelector(`#name_${cardNumber}`).value = '';
             newCard.querySelector(`#gender_${cardNumber}`).value = '';
@@ -770,24 +772,6 @@
             newCard.querySelector(`#vaccineSpan_${cardNumber}`).innerText = '';
             newCard.querySelector(`#age_${cardNumber}`).innerText = '（　　歲）';
 
-            // Add unique notifyDate input
-            const notifyDateWrapper = document.createElement('div');
-            notifyDateWrapper.classList.add('notify-date-wrapper');
-            notifyDateWrapper.style.display = 'none';
-            notifyDateWrapper.id = `notifyDateWrapper_${cardNumber}`;
-
-            notifyDateWrapper.innerHTML = `
-                <p style="height:5px">提醒下次施打疫苗日期:</p>
-                <br>
-                <input type="date" id="notifyDate_${cardNumber}" class="short" style="width: 120px;">
-                <div style="display: flex; gap: 20px; margin-top: 5px;">
-                    <button onclick="saveNotifyDate()">確定</button>
-                    <button onclick="deleteNotifyDate()">刪除</button>
-                </div>
-            `;
-
-            newCard.appendChild(notifyDateWrapper);
-
             cardContainer.appendChild(newCard);
             currentCardIndex = cardNumber - 1;
             updateCardDisplay();
@@ -795,7 +779,7 @@
             calculateAge(cardNumber);
             // 重置提醒日期資料
             currentNotifyCardIndex = -1;
-            document.getElementById('notifyDate').value = '';
+            document.getElementById('notifyDate').value = ''; 
         }
 
         function deleteCard() {
@@ -884,6 +868,7 @@
         function addEventListeners(index) {
             document.getElementById(`name_${index}`).oninput = () => validateName(index);
             document.getElementById(`vaccine_${index}`).onchange = () => validateVaccineDate(index);
+            document.getElementById(`birthdate_${index}`).onchange = () => calculateAge(index);
         }
 
         document.addEventListener('DOMContentLoaded', (event) => {
