@@ -5,7 +5,7 @@
   },
   "selected": true,
   "name": "毛起來健檢",
-  "chatBarText": "查看更多資訊",
+  "chatBarText": "毛起來健檢",
   "areas": [
     {
       "bounds": {
@@ -15,8 +15,8 @@
         "height": 950
       },
       "action": {
-        "type": "message",
-        "text": "建立健保卡"
+        "type": "postback",
+        "data": "create_card"
       }
     },
     {
@@ -27,8 +27,8 @@
         "height": 950
       },
       "action": {
-        "type": "message",
-        "text": "毛小孩健保卡本"
+        "type": "postback",
+        "data": "pet_book"
       }
     },
     {
@@ -51,8 +51,8 @@
         "height": 730
       },
       "action": {
-        "type": "message",
-        "text": "尋找24小時寵物醫院"
+        "type": "postback",
+        "data": "pet_hospital"
       }
     },
     {
@@ -63,8 +63,20 @@
         "height": 730
       },
       "action": {
-        "type": "message",
-        "text": "團隊介紹"
+        "type": "postback",
+        "data": "the_team"
+      }
+    },
+    {
+      "bounds": {
+        "x": 5,
+        "y": 1017,
+        "width": 819,
+        "height": 640
+      },
+      "action": {
+        "type": "postback",
+        "data": "pet_hotel"
       }
     }
   ]
