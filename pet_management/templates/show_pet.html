@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <title>Show Pets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <span class="arrow" id="prev">&#9664;</span>
+        <div class="card">
+            <h1>毛小孩健保卡</h1>
+            <ul id="pets-list">
+                {% for pet in pets %}
+                <li class="pet-item hidden">
+                    <img src="{{ pet.profileImage }}" alt="Pet Image">
+                    <div class="info">名稱: {{ pet.name }}</div>
+                    <div class="info">性別: {{ pet.gender }}</div>
+                    <div class="info">品種: {{ pet.breed }}</div>
+                    <div class="info">生日: {{ pet.birthdate }}</div>
+                    <div class="info">疫苗注射: {{ pet.vaccineDate }}</div>
+                    <a href="{{ url_for('edit_pet', pid=pet.pid) }}">編輯資料</a> |
+                    <a href="{{ url_for('delete_pet', pid=pet.pid) }}">刪除卡片</a>
+                </li>
+                {% endfor %}
+            </ul>
+            <button onclick="window.location.href='{{ url_for('add_pet', uid=uid) }}'">新增卡片</button>
+        </div>
+        <span class="arrow" id="next">&#9654;</span>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const pets = document.querySelectorAll('.pet-item');
+            let currentIndex = 0;
+
+            function showPet(index) {
+                pets.forEach((pet, i) => {
+                    pet.classList.toggle('visible', i === index);
+                    pet.classList.toggle('hidden', i !== index);
+                });
+            }
+
+            document.getElementById('prev').addEventListener('click', function() {
+                currentIndex = (currentIndex > 0) ? currentIndex - 1 : pets.length - 1;
+                showPet(currentIndex);
+            });
+
+            document.getElementById('next').addEventListener('click', function() {
+                currentIndex = (currentIndex < pets.length - 1) ? currentIndex + 1 : 0;
+                showPet(currentIndex);
+            });
+
+            // Show the first pet initially
+            showPet(currentIndex);
+        });
+    </script>
+</body>
+</html>
