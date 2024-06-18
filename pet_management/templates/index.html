@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <title>Index</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Welcome</h1>
+            <div id="user-info">
+                <img id="user-picture" src="" alt="User Picture">
+                <p id="user-name">Loading...</p>
+            </div>
+            <script>
+                async function main() {
+                    try {
+                        await liff.init({ liffId: '2005466366-PGo7a9Ga' });
+                        console.log('LIFF OK');
+                        if (!liff.isLoggedIn()) {
+                            liff.login();
+                        } else {
+                            const profile = await liff.getProfile();
+                            document.getElementById('user-name').textContent = `歡迎, ${profile.displayName}`;
+                            document.getElementById('user-picture').src = profile.pictureUrl;
+                            let uid = profile.userId;
+                            setTimeout(() => {
+                                window.location.href = `/check_user/${uid}`;
+                            }, 3000); // 3秒後重定向到 check_user 頁面
+                        }
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+                main();
+            </script>
+        </div>
+    </div>
+</body>
+</html>

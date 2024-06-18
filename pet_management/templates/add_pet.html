@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <title>Add Pet</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>新增毛小孩</h1>
+            <form id="addPetForm" method="POST" enctype="multipart/form-data">
+                <label for="name">毛小孩:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="gender">性別:</label>
+                <input type="text" id="gender" name="gender" required>
+                <label for="breed">品種:</label>
+                <input type="text" id="breed" name="breed" required>
+                <label for="birthdate">生日:</label>
+                <input type="date" id="birthdate" name="birthdate" required>
+                <label for="vaccineDate">疫苗注射:</label>
+                <input type="date" id="vaccineDate" name="vaccineDate" required>
+                <label for="profileImage">Profile Image:</label>
+                <input type="file" id="profileImage" name="profileImage" accept="image/*" required>
+                <button type="submit">新增卡片</button>
+            </form>
+        </div>
+    </div>

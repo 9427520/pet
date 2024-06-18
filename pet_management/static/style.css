@@ -1,0 +1,128 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* 使卡片放置在頁面的頂部 */
+    height: 100vh;
+    margin: 0;
+    padding-top: 20px; /* 添加上邊距，使其與頁面頂部保持距離 */
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;  /* 改成兩倍 */
+    position: relative;
+    padding: 0 20px;
+}
+
+.card {
+    background-color: #fff8dc;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);  /* 增加陰影 */
+    padding: 40px;  /* 增加填充 */
+    text-align: center;
+    position: relative;
+}
+
+.card h1 {
+    background-color: #ffd700;
+    border-radius: 10px 10px 0 0;
+    margin: -40px -40px 40px;
+    padding: 20px;
+    font-size: 40px;  /* 改成兩倍 */
+    color: #333;
+}
+
+.card img {
+    width: 200px;  /* 改成兩倍 */
+    height: 260px;  /* 改成兩倍 */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.card label {
+    display: block;
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 24px;  /* 改成兩倍 */
+}
+
+.card input, .card select {
+    width: calc(100% - 40px);  /* 改成兩倍 */
+    padding: 20px;  /* 改成兩倍 */
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 20px;  /* 改成兩倍 */
+}
+
+.card button {
+    background-color: #ffd700;
+    border: none;
+    border-radius: 10px;
+    padding: 20px;  /* 改成兩倍 */
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    font-size: 20px;  /* 改成兩倍 */
+}
+
+.card button:hover {
+    background-color: #ffcc00;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 48px;  /* 改成兩倍 */
+    cursor: pointer;
+}
+
+#prev {
+    left: 20px;
+}
+
+#next {
+    right: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+@media screen and (max-width: 600px) {
+    .card img {
+        width: 160px;  /* 兩倍的縮小版 */
+        height: 200px;  /* 兩倍的縮小版 */
+    }
+
+    .card h1 {
+        font-size: 36px;  /* 兩倍的縮小版 */
+    }
+
+    .card label {
+        font-size: 20px;  /* 兩倍的縮小版 */
+    }
+
+    .card input, .card select {
+        padding: 16px;  /* 兩倍的縮小版 */
+        font-size: 18px;  /* 兩倍的縮小版 */
+    }
+
+    .card button {
+        padding: 18px;  /* 兩倍的縮小版 */
+        font-size: 18px;  /* 兩倍的縮小版 */
+    }
+
+    .arrow {
+        font-size: 40px;  /* 兩倍的縮小版 */
+    }
+}
