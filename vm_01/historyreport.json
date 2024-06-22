@@ -1,0 +1,30 @@
+{
+  "type": "bubble",
+  "header": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "歷年報告",
+        "color": "#FF0000",
+        "size": "xxl",
+        "align": "center"
+      }
+    ]
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "button",
+        "action": {
+          "type": "postback",
+          "label": "action",
+          "data": "hello"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+Flask
+flask-cors
+google-cloud-storage
+Pillow
+line-bot-sdk
+uwsgi
+pymongo
+gunicorn
