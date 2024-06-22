@@ -1,0 +1,76 @@
+{
+  "size": {
+    "width": 2500,
+    "height": 1686
+  },
+  "selected": true,
+  "name": "毛起來健檢",
+  "chatBarText": "毛起來健檢",
+  "areas": [
+    {
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 830,
+        "height": 950
+      },
+      "action": {
+        "type": "postback",
+        "text": "動作 1",
+        "data": "pet_card"
+      }
+    },
+    {
+      "bounds": {
+        "x": 837,
+        "y": 0,
+        "width": 830,
+        "height": 950
+      },
+      "action": {
+        "type": "postback",
+        "text": "動作 2",
+        "data": "open_camera"
+      }
+    },
+    {
+      "bounds": {
+        "x": 1674,
+        "y": 0,
+        "width": 830,
+        "height": 950
+      },
+      "action": {
+        "type": "postback",
+        "text": "動作 3",
+        "data": "health_report"
+      }
+    },
+    {
+      "bounds": {
+        "x": 831,
+        "y": 947,
+        "width": 830,
+        "height": 730
+      },
+      "action": {
+        "type": "postback",
+        "text": "動作 4",
+        "data": "pet_hospital"
+      }
+    },
+    {
+      "bounds": {
+        "x": 1673,
+        "y": 955,
+        "width": 830,
+        "height": 730
+      },
+      "action": {
+        "type": "postback",
+        "text": "團隊介紹",
+        "data": "the_team"
+      }
+    }
+  ]
+}
