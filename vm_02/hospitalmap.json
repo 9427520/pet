@@ -1,0 +1,122 @@
+{
+  "type": "carousel",
+  "contents": [
+    {
+      "type": "bubble",
+      "size": "kilo",
+      "hero": {
+        "type": "image",
+        "url": "https://developers-resource.landpress.line.me/fx/clip/clip10.jpg",
+        "size": "full",
+        "aspectMode": "cover",
+        "aspectRatio": "280:213"
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "醫院",
+            "weight": "bold",
+            "size": "xl",
+            "wrap": true,
+            "margin": "md"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "評價",
+                "size": "sm",
+                "color": "#1C1C1C",
+                "margin": "md",
+                "flex": 0
+              }
+            ],
+            "margin": "md"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "距離",
+                "size": "sm",
+                "color": "#1C1C1C",
+                "margin": "md",
+                "flex": 0
+              }
+            ],
+            "margin": "md"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "地址",
+                "size": "sm",
+                "color": "#1C1C1C",
+                "margin": "md",
+                "flex": 0,
+                "wrap": true
+              }
+            ],
+            "margin": "md"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "營業時間",
+                "size": "sm",
+                "color": "#1C1C1C",
+                "margin": "md",
+                "flex": 0,
+                "wrap": true
+              }
+            ],
+            "margin": "xs"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "uri",
+              "label": "電話",
+              "uri": "tel:0123456789"
+            },
+            "style": "link",
+            "height": "md",
+            "gravity": "center"
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "uri",
+              "label": "地圖",
+              "uri": "https://www.google.com/maps/place/?q=place_id:123456"
+            },
+            "style": "link",
+            "height": "md",
+            "gravity": "center"
+          }
+        ],
+        "margin": "md",
+        "spacing": "md"
+      }
+    }
+  ]
+}

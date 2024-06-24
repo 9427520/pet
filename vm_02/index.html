@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寵物健檢</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <style>
+        table {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 0;
+            text-align: left;
+            position: relative;
+        }
+        .delete-row-btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 2px 5px;
+            cursor: pointer;
+            display: none;
+        }
+        .editable-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: none;
+            outline: none;
+        }
+        .half-width-input {
+            width: 49%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: none;
+            outline: none;
+            display: inline-block;
+        }
+        .value-input, .unit-input {
+            box-sizing: border-box;
+            padding: 10px;
+            border: none;
+            outline: none;
+            display: inline-block;
+        }
+        .value-input {
+            width: 50%;
+        }
+        .unit-input {
+            width: calc(50% - 10px);
+        }
+        .range-input {
+            width: calc(100% - 30px);
+            box-sizing: border-box;
+            padding: 10px;
+            border: none;
+            outline: none;
+        }
+        .add-btn {
+            background-color: #f0ad4e;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .selectable-row:hover {
+            background-color: #f1f1f1;
+        }
+        .selected {
+            background-color: #d3d3d3;
+        }
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+                font-size: 14px;
+            }
+            .editable-input, .half-width-input, .range-input, .value-input, .unit-input {
+                padding: 5px;
+            }
+            .delete-row-btn {
+                right: 2px;
+                top: 2px;
+                padding: 1px 3px;
+            }
+        }
+        @media (max-width: 480px) {
+            table {
+                width: 100%;
+                font-size: 12px;
+            }
+            .editable-input, .half-width-input, .range-input, .value-input, .unit-input {
+                padding: 3px;
+            }
+            .delete-row-btn {
+                right: 2px;
+                top: 2px;
+                padding: 1px 3px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>寵物健檢</h1>
+    <table id="editableTable">
+        <thead>
+            <tr>
+                <th colspan="3">
+                    <input type="text" id="petName" placeholder="寵物名稱" class="half-width-input">
+                    <input type="text" id="reportDate" placeholder="報告時間,例如 20XX/XX/XX" class="half-width-input">
+                </th>
+            </tr>
+            <tr>
+                <th colspan="3">
+                    <input type="text" id="petType" placeholder="寵物種類,例如 狗、貓" class="half-width-input">
+                    <input type="text" id="petAge" placeholder="年齡，例如X歲X個月" class="half-width-input">
+                </th>
+            </tr>
+            <tr>
+                <th colspan="3">
+                    <input type="text" id="petBreed" placeholder="品種,例如 拉布拉多" class="half-width-input">
+                    <input type="text" id="petWeight" placeholder="體重,例如 18KG" class="half-width-input">
+                </th>
+            </tr>
+            <tr>
+                <th colspan="3">
+                    <input type="text" id="petHealthIssues" placeholder="已知的健康問題,例如 髖關節" class="half-width-input">
+                    <input type="text" id="petFoodBrand" placeholder="目前餵食的品牌,例如 希爾思" class="half-width-input">
+                </th>
+            </tr>
+            <tr>
+                <th>檢查項目</th>
+                <th>檢查數值</th>
+                <th>範圍值</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button class="add-btn" onclick="addRow()">新增一列</button>
+    <button class="add-btn" onclick="confirmSave()">儲存所有更改</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            liff.init({ liffId: "2005517118-y5JKr3xg" }).then(() => {
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                } else {
+                    fetchData();
+                    fetchSelectedPetData();
+                }
+            }).catch(err => {
+                console.error('LIFF Initialization failed ', err);
+            });
+        });
+
+        function fetchSelectedPetData() {
+            liff.getProfile().then(profile => {
+                const userId = profile.userId;
+                axios.get(`https://william.enadv.online/get_selected_pet?user_id=${userId}`)
+                    .then(response => {
+                        const data = response.data;
+                        console.log("Selected pet data:", data); // 添加日志
+                        document.getElementById('petName').value = data.p_n;
+                        document.getElementById('petType').value = data.pet_type || data.p_t;
+                        document.getElementById('petBreed').value = data.pet_breed || data.p_v;
+                        document.getElementById('petWeight').value = data.pet_weight || data.p_w;
+                        document.getElementById('petAge').value = data.pet_age || data.age;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching selected pet data:', error);
+                        alert('獲取選中寵物數據失敗，請重試。');
+                    });
+            }).catch(err => {
+                console.error('Error getting profile:', err);
+            });
+        }
+
+        function fetchData() {
+            liff.getProfile().then(profile => {
+                const userId = profile.userId;
+                axios.get(`https://william.enadv.online/api/data?user_id=${userId}`)
+                    .then(response => {
+                        console.log("Fetched data:", response.data); // 添加日志
+                        if (Array.isArray(response.data)) {
+                            populateTable(response.data);
+                        } else {
+                            console.error('Unexpected data format:', response.data);
+                        }
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            }).catch(err => {
+                console.error('Error getting profile:', err);
+            });
+        }
+
+        function populateTable(data) {
+            const table = document.getElementById('editableTable').getElementsByTagName('tbody')[0];
+            table.innerHTML = '';
+
+            data.forEach(item => {
+                const row = table.insertRow();
+                row.setAttribute('data-key', item.key);
+                row.className = 'selectable-row';
+                row.onclick = function() {
+                    selectRow(this);
+                };
+
+                const cell1 = row.insertCell();
+                cell1.innerHTML = '<input type="text" value="' + item.key + '" class="editable-input">';
+                
+                const cell2 = row.insertCell();
+                const match = item.value.match(/^([^\d]*\d+(\.\d+)?)(.*)$/);
+                const value = match ? match[1].trim() : item.value;
+                const unit = match ? match[3].trim() : '';
+                cell2.innerHTML = `
+                    <input type="text" value="${value}" class="value-input">
+                    <input type="text" value="${unit}" class="unit-input">
+                `;
+
+                const cell3 = row.insertCell();
+                cell3.innerHTML = `
+                    <input type="text" value="${item.range}" class="range-input">
+                    <button class="delete-row-btn" onclick="confirmDeleteRow(event, this)">x</button>
+                `;
+            });
+        }
+
+        function selectRow(row) {
+            const rows = document.getElementById('editableTable').getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const deleteButton = rows[i].querySelector('.delete-row-btn');
+                if (deleteButton) {
+                    deleteButton.style.display = 'none';
+                }
+            }
+            const button = row.querySelector('.delete-row-btn');
+            button.style.display = 'inline';
+        }
+
+        function confirmDeleteRow(event, button) {
+            event.stopPropagation();
+            const row = button.parentElement.parentElement;
+            const confirmation = confirm("確認刪除此行?");
+            if (confirmation) {
+                row.parentNode.removeChild(row);
+            }
+        }
+
+        function addRow() {
+            const table = document.getElementById('editableTable').getElementsByTagName('tbody')[0];
+            const row = table.insertRow();
+            row.className = 'selectable-row';
+            row.onclick = function() {
+                selectRow(this);
+            };
+
+            const cell1 = row.insertCell();
+            cell1.innerHTML = '<input type="text" class="editable-input">';
+            
+            const cell2 = row.insertCell();
+            cell2.innerHTML = `
+                <input type="text" class="value-input">
+                <input type="text" class="unit-input">
+            `;
+
+            const cell3 = row.insertCell();
+            cell3.innerHTML = `
+                <input type="text" class="range-input">
+                <button class="delete-row-btn" onclick="confirmDeleteRow(event, this)">x</button>
+            `;
+        }
+
+        function confirmSave() {
+            const confirmation = confirm("確定要儲存所有更改嗎？");
+            if (confirmation) {
+                saveTable();
+            }
+        }
+
+        function saveTable() {
+            liff.getProfile().then(profile => {
+                const userId = profile.userId;
+                const table = document.getElementById('editableTable').getElementsByTagName('tbody')[0];
+                const rows = table.getElementsByTagName('tr');
+                const data = {
+                    user_id: userId,
+                    pet_name: document.getElementById('petName').value,
+                    report_date: document.getElementById('reportDate').value,
+                    pet_type: document.getElementById('petType').value,
+                    pet_age: document.getElementById('petAge').value,
+                    pet_breed: document.getElementById('petBreed').value,
+                    pet_weight: document.getElementById('petWeight').value,
+                    pet_health_issues: document.getElementById('petHealthIssues').value,
+                    pet_food_brand: document.getElementById('petFoodBrand').value,
+                    items: []
+                };
+
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
+                    const key = row.cells[0].getElementsByTagName('input')[0].value;
+                    const value = row.cells[1].getElementsByTagName('input')[0].value + ' ' + row.cells[1].getElementsByTagName('input')[1].value;
+                    const range = row.cells[2].getElementsByTagName('input')[0].value;
+                    data.items.push({ key: key, value: value, range: range });
+                }
+
+                axios.post('https://william.enadv.online/api/update', data, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log('Success:', response.data);
+                    alert('數據已成功儲存，報告生成中...');
+
+                    // Generate suggestions and report
+                    return axios.post('https://william.enadv.online/api/generate_report', data, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                })
+                .then(response => {
+                    console.log('Report generated:', response.data);
+                    alert('報告已生成，請查看以下鏈接：\n' + response.data.report_image_url);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('數據儲存或報告生成失敗，請重試。');
+                });
+            }).catch(err => {
+                console.error('Error getting profile:', err);
+            });
+        }
+    </script>
+</body>
+</html>

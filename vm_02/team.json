@@ -1,0 +1,145 @@
+{
+  "type": "bubble",
+  "hero": {
+    "type": "image",
+    "url": "https://i.postimg.cc/QNB62YP3/123.webp",
+    "size": "full",
+    "aspectRatio": "20:20",
+    "aspectMode": "cover",
+    "action": {
+      "type": "uri",
+      "uri": "https://line.me/"
+    }
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "毛起來健檢團隊",
+            "weight": "bold",
+            "size": "xl",
+            "wrap": true,
+            "offsetTop": "none",
+            "offsetBottom": "none",
+            "offsetEnd": "none"
+          },
+          {
+            "type": "icon",
+            "url": "https://i.postimg.cc/yxG6b1L2/pet.jpg",
+            "size": "3xl",
+            "margin": "none",
+            "offsetTop": "sm",
+            "offsetStart": "none",
+            "offsetEnd": "none"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "margin": "lg",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "創作理念",
+                "color": "#aaaaaa",
+                "size": "sm",
+                "flex": 2,
+                "wrap": true
+              },
+              {
+                "type": "text",
+                "text": "隨著人們對寵物健康的重視程度增加，寵物醫療保健市場快速增長。使用AI技術可以幫助滿足這一需求，幫助使用者了解毛小孩的健檢狀況也更方便保存資料。",
+                "wrap": true,
+                "color": "#666666",
+                "size": "xs",
+                "flex": 5
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "margin": "lg",
+            "contents": [
+              {
+                "type": "text",
+                "text": "Member",
+                "color": "#aaaaaa",
+                "size": "sm",
+                "flex": 2
+              },
+              {
+                "type": "text",
+                "text": "威霖. 達興. 偉甄. 悅柔",
+                "wrap": true,
+                "color": "#666666",
+                "size": "sm",
+                "flex": 5
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "margin": "lg",
+            "contents": [
+              {
+                "type": "text",
+                "text": "技術指導",
+                "color": "#aaaaaa",
+                "size": "sm",
+                "flex": 2
+              },
+              {
+                "type": "text",
+                "text": "Enos",
+                "wrap": true,
+                "color": "#666666",
+                "size": "sm",
+                "flex": 5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "uri",
+              "label": "問卷及建議",
+              "uri": "https://docs.google.com/forms/d/198cXkIj09tQh1qTV9BnhpcBKkG6cKusH4V_yDSXma1c/edit"
+            }
+          }
+        ],
+        "margin": "sm"
+      }
+    ],
+    "flex": 0
+  }
+}
