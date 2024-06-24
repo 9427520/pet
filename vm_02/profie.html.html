@@ -18,15 +18,25 @@
             height: 100vh;
             margin: 0;
         }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
         .card {
             background-color: white;
-            width: 90%;
+            width: 100%;
             max-width: 400px;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            position: relative;
+            overflow-y: auto;
+            max-height: 100%;
         }
         .card header {
             background-color: #ffd700;
@@ -45,8 +55,8 @@
             font-size: 1em;
         }
         .card img {
-            width: 100px;
-            height: 130px;
+            width: 130px;
+            height: 160px;
             background-color: #e0e0e0;
             margin-bottom: 15px;
             display: block;
@@ -112,11 +122,13 @@
             flex-direction: column;
         }
         #crop-image {
-            max-width: 90%;
-            max-height: 90%;
+            max-width: 100%;
+            max-height: 100%;
         }
         #crop-buttons {
-            margin-top: 20px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
         }
         #crop-buttons button {
             margin: 0 10px;
@@ -153,58 +165,60 @@
     </style>
 </head>
 <body>
-    <div class="card">
-        <header>
-            <h1>No. 1</h1>
-            <p>毛小孩健保卡</p>
-        </header>
-        <img id="petImage" src="https://via.placeholder.com/100x130" alt="Pet Image">
-        <form id="pet-info-form">
-            <label for="petName">毛小孩:</label>
-            <input type="text" id="petName" name="p_n" required>
-            
-            <label for="petGender">性別:</label>
-            <select id="petGender" name="p_g" required>
-                <option value="" disabled selected>選擇性別</option>
-                <option value="公">公</option>
-                <option value="母">母</option>
-            </select>
-            
-            <label for="petType">種類:</label>
-            <select id="petType" name="p_t" required>
-                <option value="" disabled selected>選擇種類</option>
-                <option value="狗">狗</option>
-                <option value="貓">貓</option>
-            </select>
-            
-            <label for="petVariety">品種:</label>
-            <input type="text" id="petVariety" name="p_v" required>
+    <div class="container">
+        <div class="card">
+            <header>
+                <h1>No. 1</h1>
+                <p>毛小孩健保卡</p>
+            </header>
+            <img id="petImage" src="https://via.placeholder.com/130x160" alt="Pet Image">
+            <form id="pet-info-form">
+                <label for="petName">毛小孩:</label>
+                <input type="text" id="petName" name="p_n" required>
+                
+                <label for="petGender">性別:</label>
+                <select id="petGender" name="p_g" required>
+                    <option value="" disabled selected>選擇性別</option>
+                    <option value="公">公</option>
+                    <option value="母">母</option>
+                </select>
+                
+                <label for="petType">種類:</label>
+                <select id="petType" name="p_t" required>
+                    <option value="" disabled selected>選擇種類</option>
+                    <option value="狗">狗</option>
+                    <option value="貓">貓</option>
+                </select>
+                
+                <label for="petVariety">品種:</label>
+                <input type="text" id="petVariety" name="p_v" required>
 
-            <label for="petWeight">體重:</label>
-            <input type="text" id="petWeight" name="p_w" required>
-            
-            <label for="petBirth">生日:</label>
-            <input type="date" id="petBirth" name="p_b" class="short-input" required>
-            <span class="age-label" id="ageLabel">年齡: </span>
-            
-            <label for="petVaccination">疫苗注射:</label>
-            <input type="date" id="petVaccination" name="p_va">
-            
-            <label for="nextVaccination">下次疫苗提醒:</label>
-            <input type="date" id="nextVaccination" name="n_va_re">
+                <label for="petWeight">體重:</label>
+                <input type="text" id="petWeight" name="p_w" required>
+                
+                <label for="petBirth">生日:</label>
+                <input type="date" id="petBirth" name="p_b" class="short-input" required>
+                <span class="age-label" id="ageLabel">年齡: </span>
+                
+                <label for="petVaccination">疫苗注射:</label>
+                <input type="date" id="petVaccination" name="p_va">
+                
+                <label for="nextVaccination">下次疫苗提醒:</label>
+                <input type="date" id="nextVaccination" name="n_va_re">
 
-            <div class="button-container">
-                <button type="button" class="arrow arrow-left" onclick="previousCard()">&#8592;</button>
-                <button type="button" class="arrow arrow-right" onclick="nextCard()">&#8594;</button>
-            </div>
+                <div class="button-container">
+                    <button type="button" class="arrow arrow-left disabled" onclick="previousCard()">&#8592;</button>
+                    <button type="button" class="arrow arrow-right disabled" onclick="nextCard()">&#8594;</button>
+                </div>
 
-            <div class="button-container">
-                <button type="button" onclick="editInfo()">編輯資料</button>
-                <button type="submit">確認存檔</button>
-                <button type="button" onclick="addCard()" class="disabled">新增卡片</button>
-                <button type="button" onclick="deleteCard()" class="disabled">刪除卡片</button>
-            </div>
-        </form>
+                <div class="button-container">
+                    <button type="button" onclick="editInfo()" class="disabled">編輯資料</button>
+                    <button type="submit" onclick="checkIfEditable(event)">確認存檔</button>
+                    <button type="button" onclick="addCard()" class="disabled">新增卡片</button>
+                    <button type="button" onclick="deleteCard()" class="disabled">刪除卡片</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div id="crop-container">
@@ -257,7 +271,7 @@
                     document.getElementById('ageLabel').textContent = `年齡: ${age || ''} 歲`;
                     document.getElementById('petVaccination').value = petVaccination || '';
                     document.getElementById('nextVaccination').value = nextVaccination || '';
-                    document.getElementById('petImage').src = petImage || 'https://via.placeholder.com/100x130';
+                    document.getElementById('petImage').src = petImage || 'https://via.placeholder.com/130x160';
                 }
             }).catch(err => {
                 console.error('LIFF Initialization failed ', err);
@@ -277,9 +291,11 @@
                         document.getElementById('crop-image').src = event.target.result;
                         document.getElementById('crop-container').style.display = 'flex';
                         cropper = new Cropper(document.getElementById('crop-image'), {
-                            aspectRatio: NaN,
+                            aspectRatio: NaN, // 設定裁剪框的寬高比為 100:130
                             viewMode: 1,
                             autoCropArea: 1,
+                            background: false,
+                            checkOrientation: false,
                             movable: true,
                             rotatable: true,
                             scalable: true,
@@ -288,14 +304,18 @@
                             cropBoxResizable: true,
                             ready: function() {
                                 const containerData = this.cropper.getContainerData();
-                                cropBoxData = {
-                                    left: containerData.width * 0.25,
-                                    top: containerData.height * 0.25,
-                                    width: containerData.width * 0.5,
-                                    height: containerData.height * 0.5,
-                                };
-                                this.cropper.setCropBoxData(cropBoxData);
-                                canvasData = this.cropper.getCanvasData();
+                                const imageData = this.cropper.getImageData();
+                                
+                                // 設置裁剪框為 100x130
+                                this.cropper.setCropBoxData({
+                                    left: (containerData.width - 100) / 2,
+                                    top: (containerData.height - 130) / 2,
+                                    width: 100,
+                                    height: 130
+                                });
+                                // 縮放圖片使其顯示為 100x130
+                                const scale = Math.min(100 / imageData.width, 130 / imageData.height);
+                                this.cropper.zoomTo(scale);  
                             },
                             cropend: function() {
                                 cropBoxData = this.cropper.getCropBoxData();
@@ -332,6 +352,10 @@
 
             document.getElementById('pet-info-form').addEventListener('submit', function(e) {
                 e.preventDefault();
+                if (document.querySelector('button[type="submit"]').classList.contains('disabled')) {
+                    alert('請編輯表單');
+                    return;
+                }
                 var formData = new FormData(e.target);
                 var data = {};
                 formData.forEach((value, key) => {
@@ -356,13 +380,19 @@
 
                 updateArrows();
                 updateButtons();
+                checkDeleteButton(); // Update delete button status
             });
+
+            updateArrows(); // Initialize arrows to be disabled
+            checkDeleteButton(); // Initialize delete button
+            unlockForm(); // Unlock form initially
         });
 
         function cropImage() {
             const canvas = cropper.getCroppedCanvas({
                 width: 100,
                 height: 130,
+                fillColor: 'transparent',
             });
             const croppedImage = canvas.toDataURL();
 
@@ -396,7 +426,11 @@
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
-            if (selectedDate > today) {
+            // 設置 tomorrow 為今天加一天
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+
+            if (selectedDate >= tomorrow) {
                 alert('日期不合理唷!!');
                 input.classList.add('error');
             } else {
@@ -409,7 +443,11 @@
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
-            if (selectedDate <= today) {
+            // 設置 tomorrow 為今天加一天
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+
+            if (selectedDate < tomorrow) {
                 alert('日期不合理唷!!');
                 input.classList.add('error');
             } else {
@@ -418,30 +456,47 @@
         }
 
         function lockForm() {
-            document.querySelectorAll('#pet-info-form input, #pet-info-form select').forEach(element => {
+            const inputs = Array.from(document.querySelectorAll('#pet-info-form input, #pet-info-form select'));
+            inputs.forEach(element => {
                 element.disabled = true;
             });
-            document.querySelectorAll('.button-container button').forEach(button => {
-                if (button.innerText !== '編輯資料' && button.innerText !== '新增卡片' && button.innerText !== '刪除卡片') {
-                    button.disabled = true;
-                }
+            const buttons = Array.from(document.querySelectorAll('.button-container button'));
+            buttons.forEach(button => {
+                button.disabled = true;
+                button.classList.add('disabled');
             });
             document.getElementById('petImage').classList.add('locked');
+            document.querySelector('button[onclick="editInfo()"]').classList.remove('disabled');
+            document.querySelector('button[onclick="editInfo()"]').disabled = false;
+            document.querySelector('.arrow-left').classList.remove('disabled');
+            document.querySelector('.arrow-right').classList.remove('disabled');
             document.querySelector('button[onclick="addCard()"]').classList.remove('disabled');
+            document.querySelector('button[onclick="addCard()"]').disabled = false;
             updateArrows();
             updateButtons();
         }
 
         function unlockForm() {
-            document.querySelectorAll('#pet-info-form input, #pet-info-form select').forEach(element => {
+            const inputs = Array.from(document.querySelectorAll('#pet-info-form input, #pet-info-form select'));
+            inputs.forEach(element => {
                 element.disabled = false;
             });
-            document.querySelectorAll('.button-container button').forEach(button => {
+            const buttons = Array.from(document.querySelectorAll('.button-container button'));
+            buttons.forEach(button => {
                 if (button.innerText !== '新增卡片' && button.innerText !== '刪除卡片') {
                     button.disabled = false;
+                    button.classList.remove('disabled');
                 }
             });
             document.getElementById('petImage').classList.remove('locked');
+            document.querySelector('button[onclick="editInfo()"]').classList.add('disabled');
+            document.querySelector('button[onclick="editInfo()"]').disabled = true;
+            document.querySelector('button[type="submit"]').classList.remove('disabled');
+            document.querySelector('button[type="submit"]').disabled = false;
+            document.querySelector('.arrow-left').classList.add('disabled');
+            document.querySelector('.arrow-right').classList.add('disabled');
+            document.querySelector('button[onclick="addCard()"]').classList.add('disabled');
+            document.querySelector('button[onclick="addCard()"]').disabled = true;
             updateArrows();
             updateButtons();
         }
@@ -452,13 +507,13 @@
 
         function addCard() {
             if (document.querySelector('button[onclick="addCard()"]').classList.contains('disabled')) {
-                alert('請先登打完畢');
+                alert('請先完成當前卡片編輯');
                 return;
             }
 
             document.getElementById('pet-info-form').reset();
             document.getElementById('ageLabel').textContent = '年齡: ';
-            document.getElementById('petImage').src = 'https://via.placeholder.com/100x130';
+            document.getElementById('petImage').src = 'https://via.placeholder.com/130x160';
             unlockForm();
 
             currentCard = petData.length;
@@ -466,9 +521,15 @@
             updateCardHeader();
             updateArrows();
             updateButtons();
+            checkDeleteButton(); // Update delete button status
         }
 
         function deleteCard() {
+            if (petData.length <= 1) {
+                alert('無資料可刪除');
+                return;
+            }
+
             if (confirm('確定要刪除嗎?')) {
                 petData.splice(currentCard, 1);
                 if (currentCard > 0) {
@@ -491,15 +552,16 @@
                     }
                 });
                 document.getElementById('ageLabel').textContent = `年齡: ${petData[currentCard].age || ''}`;
-                document.getElementById('petImage').src = petData[currentCard].image || 'https://via.placeholder.com/100x130';
+                document.getElementById('petImage').src = petData[currentCard].image || 'https://via.placeholder.com/130x160';
             } else {
                 document.getElementById('pet-info-form').reset();
                 document.getElementById('ageLabel').textContent = '年齡: ';
-                document.getElementById('petImage').src = 'https://via.placeholder.com/100x130';
+                document.getElementById('petImage').src = 'https://via.placeholder.com/130x160';
             }
             lockForm();
             updateCardHeader();
             updateArrows();
+            checkDeleteButton(); // Update delete button status
         }
 
         function previousCard() {
@@ -507,7 +569,7 @@
                 currentCard--;
                 loadCardData();
             } else {
-                alert('已經為第一頁');
+                alert('已無上一筆資料');
             }
         }
 
@@ -516,18 +578,42 @@
                 currentCard++;
                 loadCardData();
             } else {
-                alert('已經為最後一頁');
+                alert('已無下一筆資料');
             }
         }
 
         function updateArrows() {
-            document.querySelector('.arrow-left').classList.toggle('disabled', currentCard === 0);
-            document.querySelector('.arrow-right').classList.toggle('disabled', currentCard >= petData.length - 1);
+            const leftArrow = document.querySelector('.arrow-left');
+            const rightArrow = document.querySelector('.arrow-right');
+            const isFormEditable = !document.querySelector('#pet-info-form input').disabled;
+
+            leftArrow.classList.toggle('disabled', isFormEditable || currentCard === 0);
+            rightArrow.classList.toggle('disabled', isFormEditable || currentCard >= petData.length - 1);
+
+            leftArrow.disabled = isFormEditable || currentCard === 0;
+            rightArrow.disabled = isFormEditable || currentCard >= petData.length - 1;
         }
 
         function updateButtons() {
-            document.querySelector('button[onclick="addCard()"]').classList.toggle('disabled', currentCard < petData.length - 1);
-            document.querySelector('button[onclick="deleteCard()"]').classList.toggle('disabled', petData.length <= 1);
+            const addButton = document.querySelector('button[onclick="addCard()"]');
+            const deleteButton = document.querySelector('button[onclick="deleteCard()"]');
+            const inputs = Array.from(document.querySelectorAll('#pet-info-form input, #pet-info-form select'));
+
+            addButton.classList.toggle('disabled', !inputs.every(element => element.disabled));
+            addButton.disabled = !inputs.every(element => element.disabled);
+            deleteButton.classList.toggle('disabled', petData.length <= 1);
+            deleteButton.disabled = petData.length <= 1;
+        }
+
+        function checkDeleteButton() {
+            const deleteButton = document.querySelector('button[onclick="deleteCard()"]');
+            if (petData.length <= 1) {
+                deleteButton.classList.add('disabled');
+                deleteButton.disabled = true;
+            } else {
+                deleteButton.classList.remove('disabled');
+                deleteButton.disabled = false;
+            }
         }
 
         function calculateAge(birthDate) {
@@ -554,6 +640,13 @@
                 console.error('Error:', error);
                 alert('寵物資訊保存失敗');
             });
+        }
+
+        function checkIfEditable(e) {
+            if (e.target.classList.contains('disabled')) {
+                alert('請編輯表單');
+                e.preventDefault();
+            }
         }
     </script>
 </body>
