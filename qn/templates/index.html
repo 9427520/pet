@@ -14,6 +14,8 @@
                 const profile = await liff.getProfile();
                 document.getElementById('user_id').value = profile.userId;
                 document.getElementById('user_name').value = profile.displayName;
+                const user = liff.getDecodedIDToken();
+                document.getElementById('user_email').value = user.email;
             }
         }
 
@@ -22,20 +24,16 @@
         async function handleSubmit(event) {
             event.preventDefault();
             const formData = new FormData(event.target);
-            const data = {
-                user_id: document.getElementById('user_id').value,
-                form_data: Object.fromEntries(formData.entries())
-            };
-            
+            formData.append('user_id', document.getElementById('user_id').value);
+
             const response = await fetch('/qn/submit_form', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: formData
             });
             const result = await response.json();
             if (result.status === 'success') {
                 alert('表單提交成功');
-				liff.closeWindow();
+		liff.closeWindow();
             } else {
                 alert('表單提交失敗: ' + result.message);
             }
@@ -44,9 +42,11 @@
 </head>
 <body>
     <h1>寵物健檢報告分析服務問卷</h1>
-    <form onsubmit="handleSubmit(event)">
+    <form onsubmit="handleSubmit(event)" enctype="multipart/form-data">
         <input type="hidden" name="user_id" id="user_id">
         <input type="hidden" name="user_name" id="user_name">
+        <input type="hidden" name="user_email" id="user_email">
+        
         <p>該怎麼稱呼您呢？*</p>
         <input type="text" name="name" required><br>
         
@@ -75,22 +75,22 @@
         
         <p>您希望我們的服務提供哪些功能？（可多選）*</p>
         <input type="checkbox" name="desired_features" value="健康報告自動分析"> 健康報告自動分析<br>
-        <input type="checkbox" name="desired_features" value="定期提醒健康檢查"> 定期提醒健康檢查<br>
-        <input type="checkbox" name="desired_features" value="健康數據圖表生成"> 健康數據圖表生成<br>
-        <input type="checkbox" name="desired_features" value="寵物健康資訊與建議"> 寵物健康資訊與建議<br>
+        <input type="checkbox" name="desired_features1" value="定期提醒健康檢查"> 定期提醒健康檢查<br>
+        <input type="checkbox" name="desired_features2" value="健康數據圖表生成"> 健康數據圖表生成<br>
+        <input type="checkbox" name="desired_features3" value="寵物健康資訊與建議"> 寵物健康資訊與建議<br>
         <input type="checkbox" name="desired_features" value="其他"> 其他<input type="text" name="desired_features_other"><br>
         
         <p>您對健康報告的分析結果有何期待？（可多選）*</p>
         <input type="checkbox" name="analysis_expectations" value="簡單易懂的文字說明"> 簡單易懂的文字說明<br>
-        <input type="checkbox" name="analysis_expectations" value="專業詳細的數據分析"> 專業詳細的數據分析<br>
-        <input type="checkbox" name="analysis_expectations" value="視覺化圖表顯示"> 視覺化圖表顯示<br>
+        <input type="checkbox" name="analysis_expectations1" value="專業詳細的數據分析"> 專業詳細的數據分析<br>
+        <input type="checkbox" name="analysis_expectations2" value="視覺化圖表顯示"> 視覺化圖表顯示<br>
         <input type="checkbox" name="analysis_expectations" value="其他"> 其他<input type="text" name="analysis_expectations_other"><br>
         
         <p>您希望從健康報告中獲得哪些具體資訊？（可多選）*</p>
         <input type="checkbox" name="report_information" value="身體各項指標是否正常"> 身體各項指標是否正常<br>
-        <input type="checkbox" name="report_information" value="異常指標的詳細解釋"> 異常指標的詳細解釋<br>
-        <input type="checkbox" name="report_information" value="健康狀況變化趨勢"> 健康狀況變化趨勢<br>
-        <input type="checkbox" name="report_information" value="健康管理建議"> 健康管理建議<br>
+        <input type="checkbox" name="report_information1" value="異常指標的詳細解釋"> 異常指標的詳細解釋<br>
+        <input type="checkbox" name="report_information2" value="健康狀況變化趨勢"> 健康狀況變化趨勢<br>
+        <input type="checkbox" name="report_information3" value="健康管理建議"> 健康管理建議<br>
         <input type="checkbox" name="report_information" value="其他"> 其他<input type="text" name="report_information_other"><br>
         
         <p>您對我們的服務有什麼其他的建議或意見？或是你期許的功能?</p>
