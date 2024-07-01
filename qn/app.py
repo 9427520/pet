@@ -87,7 +87,7 @@ def submit_form():
         data = request.form.to_dict(flat=False)
         #print(f"Received form data: {data}")
         user_id = data.get('user_id', [None])[0]
-        user_email = data.get('user_email', [None])[0]
+        user_email = data.get('user_email', [None])[0] 
         form_data = {key: value if len(value) > 1 else value[0] for key, value in data.items() if key not in ['user_id', 'user_email']}
         
         if not user_id:
@@ -101,16 +101,22 @@ def submit_form():
 
         if 'report_photos' in request.files:
             file = request.files['report_photos']
-            current_time = datetime.now().strftime("%y%m%d%H%M%S")
-            file_name = f"{user_id}_{current_time}.png"
-            questionnaire_blob = bucket.blob(f'pet_qn/{file_name}')
-            questionnaire_blob.upload_from_file(file, content_type=file.content_type)
-            form_data['report_photo_url'] = questionnaire_blob.public_url
-            print(f"Uploaded photo URL: {form_data['report_photo_url']}")
+            if file.filename != '' and file.content_length > 0:
+                current_time = datetime.now().strftime("%y%m%d%H%M%S")
+                extension = os.path.splitext(file.filename)[1]  # 獲取文件副檔名
+                file_name = f"{user_id}_{current_time}{extension}"
+                #file_name = f"{user_id}_{current_time}.png"
+                questionnaire_blob = bucket.blob(f'pet_qn/{file_name}')
+                questionnaire_blob.upload_from_file(file, content_type=file.content_type)
+                form_data['report_photo_url'] = questionnaire_blob.public_url
+                print(f"Uploaded photo URL: {form_data['report_photo_url']}")
+            else:
+                print("No file uploaded or file is empty.")
         
         questionnaire_data = {
             "user_id": user_id,
             "user_email": user_email,
+            "post_time": datetime.now().strftime("%Y%m%d-%H%M%S"),
             **form_data
         }
         questionnaire_collection.insert_one(questionnaire_data)
