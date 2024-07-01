@@ -78,7 +78,7 @@ def send_email(to_email, pet_name, vaccine_date):
 LIFF_ID = '2005466366-WOBjGlqG'
 @app.route('/qn', methods=['GET'])
 def index():
-    return render_template('index.html', liff_id=LIFF_ID)
+    return render_template('index_redesign.html', liff_id=LIFF_ID)
 
 @app.route('/qn/submit_form', methods=['POST'])
 def submit_form():

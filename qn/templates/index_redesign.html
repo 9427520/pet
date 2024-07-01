@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寵物健檢報告分析服務問卷</title>
+    <style>
+        body {
+            background-color: #FFFF99;
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            font-size: 16px;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #FFD700;
+            padding: 20px;
+            margin: 0;
+            width: 100%;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 16px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 8px;
+            transform: scale(1.5);
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .radio-group label, .checkbox-group label {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        button {
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #feb47b, #ff7e5f);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+                padding: 10px 0;
+            }
+
+            button {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+            input[type="radio"],
+            input[type="checkbox"] {
+                transform: scale(1.2);
+            }
+        }
+    </style>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        async function main() {
+            await liff.init({ liffId: "{{ liff_id }}" });
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            } else {
+                const profile = await liff.getProfile();
+                document.getElementById('user_id').value = profile.userId;
+                document.getElementById('user_name').value = profile.displayName;
+                const user = liff.getDecodedIDToken();
+                document.getElementById('user_email').value = user.email;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", main);
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            formData.append('user_id', document.getElementById('user_id').value);
+
+            const response = await fetch('/qn/submit_form', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                alert('表單提交成功');
+                liff.closeWindow();
+            } else {
+                alert('表單提交失敗: ' + result.message);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>寵物健檢報告分析服務問卷</h1>
+        <form onsubmit="handleSubmit(event)" enctype="multipart/form-data">
+            <input type="hidden" name="user_id" id="user_id">
+            <input type="hidden" name="user_name" id="user_name">
+            <input type="hidden" name="user_email" id="user_email">
+
+            <div class="form-group">
+                <label for="name">該怎麼稱呼您呢？</label>
+                <input type="text" name="name" id="name" required>
+            </div>
+
+            <div class="form-group">
+                <label>您的寵物品種是？</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="pet_type" value="貓貓" required>貓貓</label>
+                    <label><input type="radio" name="pet_type" value="狗狗" required>狗狗</label>
+                    <label><input type="radio" name="pet_type" value="其他" required>其他<input type="text" name="pet_type_other"></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>您的寵物性別是？</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="pet_gender" value="母" required>母</label>
+                    <label><input type="radio" name="pet_gender" value="公" required>公</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>您通常多久為寵物進行一次健康檢查？</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="checkup_frequency" value="每半年一次" required>每半年一次</label>
+                    <label><input type="radio" name="checkup_frequency" value="每年一次" required>每年一次</label>
+                    <label><input type="radio" name="checkup_frequency" value="不固定" required>不固定</label>
+                    <label><input type="radio" name="checkup_frequency" value="從未檢查過" required>從未檢查過</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="last_checkup">您上次為寵物進行健康檢查的時間大約是何時？(沒有可跳過此題)</label>
+                <input type="date" name="last_checkup" id="last_checkup">
+            </div>
+
+            <div class="form-group">
+                <label>您的寵物健診報告都有統一整理並記得保存在哪嗎? (沒有可跳過)</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="report_storage" value="都有清楚整理存放">都有清楚整理存放</label>
+                    <label><input type="radio" name="report_storage" value="不確定要找一下">不確定要找一下</label>
+                    <label><input type="radio" name="report_storage" value="已經不見了">已經不見了</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>您希望我們的服務提供哪些功能？（可多選）</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="desired_features" value="健康報告自動分析">健康報告自動分析</label>
+                    <label><input type="checkbox" name="desired_features1" value="定期提醒健康檢查">定期提醒健康檢查</label>
+                    <label><input type="checkbox" name="desired_features2" value="健康數據圖表生成">健康數據圖表生成</label>
+                    <label><input type="checkbox" name="desired_features3" value="寵物健康資訊與建議">寵物健康資訊與建議</label>
+                    <label><input type="checkbox" name="desired_features4" value="其他">其他<input type="text" name="desired_features_other"></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>您對健康報告的分析結果有何期待？（可多選）</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="analysis_expectations" value="簡單易懂的文字說明">簡單易懂的文字說明</label>
+                    <label><input type="checkbox" name="analysis_expectations1" value="專業詳細的數據分析">專業詳細的數據分析</label>
+                    <label><input type="checkbox" name="analysis_expectations2" value="視覺化圖表顯示">視覺化圖表顯示</label>
+                    <label><input type="checkbox" name="analysis_expectations4" value="其他">其他<input type="text" name="analysis_expectations_other"></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>您希望從健康報告中獲得哪些具體資訊？（可多選）</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="report_information" value="身體各項指標是否正常">身體各項指標是否正常</label>
+                    <label><input type="checkbox" name="report_information1" value="異常指標的詳細解釋">異常指標的詳細解釋</label>
+                    <label><input type="checkbox" name="report_information2" value="健康狀況變化趨勢">健康狀況變化趨勢</label>
+                    <label><input type="checkbox" name="report_information3" value="健康管理建議">健康管理建議</label>
+                    <label><input type="checkbox" name="report_information4" value="其他">其他<input type="text" name="report_informations_other"></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>您對我們的服務有什麼其他的建議或意見？或是你期許的功能?</label>
+                <textarea name="additional_comments"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>請提供歷年寵物健檢報告照片以利研究，僅作為學術用途 ，不會外流與做商業使用</label>
+                <input type="file" name="report_photos" multiple>
+            </div>
+
+            <button type="submit">提交</button>
+        </form>
+    </div>
+</body>
+</html>
