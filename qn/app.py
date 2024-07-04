@@ -55,7 +55,7 @@ def send_vaccine_reminders():
 
 def send_email(to_email, pet_name, vaccine_date):
     subject = "寵物疫苗提醒"
-    body = f"親愛的寵物主人，\n\n這是一封提醒信，您的寵物 {pet_name} 預定在 {vaccine_date} 進行疫苗接種。請確保提前安排好相關事宜。\n\n此致\n毛起來健檢團隊"
+    body = f"親愛的寵物主人，\n\n這是一封提醒信，您的寵物 {pet_name} 預定在 {vaccine_date} 進行疫苗接種。請確保提前安排好相關事宜。\n\n此致\n寵物照護團隊"
 
     msg = MIMEMultipart()
     msg['From'] = gmail_user
@@ -78,16 +78,16 @@ def send_email(to_email, pet_name, vaccine_date):
 LIFF_ID = '2005466366-WOBjGlqG'
 @app.route('/qn', methods=['GET'])
 def index():
-    return render_template('index_redesign.html', liff_id=LIFF_ID)
+    return render_template('index_test.html', liff_id=LIFF_ID)
 
 @app.route('/qn/submit_form', methods=['POST'])
 def submit_form():
     try:
         # 轉換為字典並保留所有值
         data = request.form.to_dict(flat=False)
-        #print(f"Received form data: {data}")
+        print(f"Received form data: {data}")
         user_id = data.get('user_id', [None])[0]
-        user_email = data.get('user_email', [None])[0] 
+        user_email = data.get('user_email', [None])[0]
         form_data = {key: value if len(value) > 1 else value[0] for key, value in data.items() if key not in ['user_id', 'user_email']}
         
         if not user_id:
@@ -101,11 +101,10 @@ def submit_form():
 
         if 'report_photos' in request.files:
             file = request.files['report_photos']
-            if file.filename != '' and file.content_length > 0:
+            if file and file.filename != '':
                 current_time = datetime.now().strftime("%y%m%d%H%M%S")
                 extension = os.path.splitext(file.filename)[1]  # 獲取文件副檔名
                 file_name = f"{user_id}_{current_time}{extension}"
-                #file_name = f"{user_id}_{current_time}.png"
                 questionnaire_blob = bucket.blob(f'pet_qn/{file_name}')
                 questionnaire_blob.upload_from_file(file, content_type=file.content_type)
                 form_data['report_photo_url'] = questionnaire_blob.public_url
@@ -148,4 +147,3 @@ def login():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
