@@ -1,0 +1,285 @@
+{
+  "type": "bubble",
+  "size": "mega",
+  "header": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "毛小孩健保卡",
+        "weight": "bold",
+        "size": "lg",
+        "align": "center",
+        "offsetBottom": "10px"
+      }
+    ],
+    "paddingBottom": "xs"
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "image",
+                "aspectMode": "cover",
+                "size": "full",
+                "align": "center",
+                "url": "{image_url}"
+              }
+            ],
+            "cornerRadius": "8px",
+            "borderWidth": "3px",
+            "borderColor": "#FFFFFF",
+            "position": "relative",
+            "paddingTop": "lg",
+            "width": "80px",
+            "height": "104px",
+            "justifyContent": "center",
+            "offsetTop": "lg"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "毛小孩：",
+                    "size": "sm",
+                    "color": "#000000",
+                    "weight": "bold",
+                    "align": "start",
+                    "position": "absolute"
+                  },
+                  {
+                    "type": "text",
+                    "text": "{pet_name}",
+                    "size": "sm",
+                    "margin": "75px"
+                  }
+                ],
+                "spacing": "xl",
+                "margin": "sm"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "性別：",
+                    "size": "sm",
+                    "color": "#000000",
+                    "weight": "bold",
+                    "position": "absolute"
+                  },
+                  {
+                    "type": "text",
+                    "text": "{pet_gender}",
+                    "size": "sm",
+                    "margin": "75px"
+                  }
+                ],
+                "spacing": "sm",
+                "margin": "md"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "種類：",
+                    "size": "sm",
+                    "color": "#000000",
+                    "weight": "bold",
+                    "position": "absolute"
+                  },
+                  {
+                    "type": "text",
+                    "text": "{pet_type}",
+                    "margin": "75px",
+                    "size": "sm"
+                  }
+                ],
+                "spacing": "sm",
+                "margin": "md"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "品種：",
+                    "size": "sm",
+                    "color": "#000000",
+                    "weight": "bold",
+                    "position": "absolute"
+                  },
+                  {
+                    "type": "text",
+                    "text": "{pet_variety}",
+                    "size": "sm",
+                    "margin": "75px"
+                  }
+                ],
+                "spacing": "sm",
+                "margin": "md"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "體重：",
+                    "size": "sm",
+                    "color": "#000000",
+                    "weight": "bold",
+                    "position": "absolute"
+                  },
+                  {
+                    "type": "text",
+                    "text": "{pet_weight}",
+                    "size": "sm",
+                    "margin": "75px"
+                  }
+                ],
+                "spacing": "sm",
+                "margin": "md"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "生日：",
+                    "size": "sm",
+                    "color": "#000000",
+                    "weight": "bold",
+                    "position": "absolute"
+                  },
+                  {
+                    "type": "text",
+                    "text": "{pet_birth} ({age}歲)",
+                    "size": "sm",
+                    "margin": "75px"
+                  }
+                ],
+                "spacing": "sm",
+                "margin": "md"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "疫苗注射：",
+                    "size": "sm",
+                    "color": "#000000",
+                    "weight": "bold",
+                    "position": "absolute"
+                  },
+                  {
+                    "type": "text",
+                    "text": "{pet_vaccination}",
+                    "size": "sm",
+                    "margin": "75px"
+                  }
+                ],
+                "spacing": "sm",
+                "margin": "md"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "下次提醒：",
+                    "size": "sm",
+                    "color": "#000000",
+                    "weight": "bold",
+                    "position": "absolute"
+                  },
+                  {
+                    "type": "text",
+                    "text": "{next_vaccination_reminder}",
+                    "size": "sm",
+                    "margin": "75px"
+                  }
+                ],
+                "spacing": "sm",
+                "margin": "md"
+              }
+            ],
+            "paddingStart": "sm",
+            "margin": "sm",
+            "paddingBottom": "xs"
+          }
+        ],
+        "spacing": "none",
+        "paddingAll": "xs"
+      }
+    ],
+    "paddingAll": "sm",
+    "backgroundColor": "#FCFAF2"
+  },
+  "footer": {
+    "type": "box",
+    "layout": "horizontal",
+    "contents": [
+      {
+        "type": "button",
+        "action": {
+          "type": "postback",
+          "label": "選擇",
+          "data": "{pet_id}"
+        },
+        "style": "link",
+        "height": "sm"
+      },
+      {
+        "type": "button",
+        "action": {
+          "type": "postback",
+          "label": "刪除",
+          "data": "\"hello\""
+        },
+        "style": "link",
+        "height": "sm"
+      },
+      {
+        "type": "button",
+        "action": {
+          "type": "uri",
+          "label": "編輯",
+          "uri": "http://linecorp.com/"
+        },
+        "height": "sm",
+        "style": "link"
+      }
+    ],
+    "position": "relative"
+  },
+  "styles": {
+    "header": {
+      "backgroundColor": "#FFEE99"
+    }
+  }
+}
